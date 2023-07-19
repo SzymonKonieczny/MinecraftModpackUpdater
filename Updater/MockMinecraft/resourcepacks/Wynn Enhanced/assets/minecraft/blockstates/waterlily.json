@@ -1,0 +1,15 @@
+{
+    "variants": {
+        "normal": [
+            { "model": "waterlily", "weight": 90},
+			{ "model": "waterlily", "y": 90 , "weight": 90},
+			{ "model": "waterlily", "y": 180 , "weight": 90},
+			{ "model": "waterlily", "y": 270 , "weight": 90},
+			
+            { "model": "waterlily_flower", "weight": 20 },
+			{ "model": "waterlily_flower", "y": 90 , "weight": 20 },
+			{ "model": "waterlily_flower", "y": 180 , "weight": 20 },
+			{ "model": "waterlily_flower", "y": 270 , "weight": 20 }
+        ]
+    }
+}

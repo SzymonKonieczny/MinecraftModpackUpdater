@@ -1,0 +1,13 @@
+
+[WorldGen]
+	#Raritanium Ore Gen
+	raritaniumOreGen = true
+	#Raritanium Veins Per Chunk
+	raritaniumOreVeinsPerChunk = 8
+	#Raritanium Vein Size
+	raritaniumVeinSize = 8
+	#Raritanium Ore Min Y
+	raritaniumOreGenMinY = -60
+	#Raritanium Ore Max Y
+	raritaniumOreGenMaxY = 30
+

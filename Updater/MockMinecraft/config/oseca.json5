@@ -1,0 +1,72 @@
+{
+	// Use this option to enable or disable the mod.
+	"isModEnabled": true,
+	"sounds": {
+		// Set this to false to disable attack sounds like sweeping and critical hits.
+		"attack": false
+	},
+	"eyeCandy": {
+		// Set this to true to overlay the current Minecraft version on the HUD like before Minecraft 1.0.
+		"oldVersionOverlay": true,
+		// Set this to true to remove the white border and add yellow text with a blue background when hovering over buttons.
+		"oldButtonHover": true,
+		// Set this to true to bring back the old tooltip boxes from Minecraft Beta 1.7.
+		"oldTooltipBoxes": true,
+		// Set this to true to bring back to disable light flickering from Minecraft Beta 1.7.
+		"oldLightFlicker": true,
+		// Set this to true to bring back the old durability colors for items in the hotbar.
+		"oldDamageColors": true,
+		// Set this to true to bring back the old item holding and swinging position.
+		"oldItemHolding": true,
+		// Set this to true to disable item merging. This will not work in multiplayer.
+		"oldItemMerging": true,
+		// Set this to true to simulate the old 2D floating items.
+		"old2DItems": true
+	},
+	"animations": {
+		// Set this to false to prevent the cooldown animation that plays after every swing or change in slot.
+		"shouldCooldown": false,
+		// Set this to false to prevent the reequip animation that plays after breaking a block.
+		"shouldReequip": false,
+		// Set this to false to prevent sweep particles from showing when attacking an entity.
+		"shouldSweep": false,
+		// Set this to false to prevent the subtle arm sway animation that plays when looking in different directions.
+		"shouldArmSway": false,
+		// Set this to false to prevent a subtle animation that happens when trying to move while colliding with a block.
+		"shouldCollideBob": false,
+		// Set this to true to allow a subtle animation to be applied to the arm and viewing distance when jumping or falling.
+		"shouldBobVertical": true,
+		// Set this to false to prevent the smooth transition animation that plays when sneaking.
+		"shouldSneakSmooth": false,
+		// Set this to false to prevent the smooth transition animation that plays when sneaking.
+		"shouldSwingDrop": false,
+		// Set this to false to prevent the smooth transition animation that plays when sneaking.
+		"shouldToolDisintegrate": false
+	},
+	/* The higher the swing number is the slower the swinging animation will be.
+	   Alpha/Beta Minecraft: 8
+	   Modern Minecraft: 6
+	*/
+	"swings": {
+		// Give a custom swing speed that is used when using tools such as shovels, pickaxes, and hoes.
+		"tool": 8,
+		// Give a custom swing speed that is used when placing blocks.
+		"block": 8,
+		// Give a custom swing speed that is used when using swords.
+		"sword": 8,
+		// Assign a swing speed to anything that isn't a block, tool, or sword.
+		"item": 8,
+		// Assign a swing speed when the haste potion effect is active. Set to -1 to disable.
+		"haste": -1,
+		// Assign a swing speed when the mining fatigue potion effect is active. Set to -1 to disable.
+		"miningFatigue": -1,
+		/* Give a custom swing speed that is applied globally. Set to -1 to disable.
+		   This will override all configured swing speeds that don't match this number.
+		*/
+		"global": -1
+	},
+	/* Define custom swing speeds for individualized items.
+	   Example: "minecraft:stick": 14
+	*/
+	"custom": { }
+}

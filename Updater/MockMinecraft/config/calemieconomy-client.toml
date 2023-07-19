@@ -1,0 +1,10 @@
+
+[Overlay]
+	#Render Wallet Currency Overlay
+	#Enable this render an overlay on your game screen showing your Wallet stats.
+	walletOverlay = true
+	#Wallet Currency Overlay Position
+	#The position of the screen of the Wallet overlay
+	#The valid values are {TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT}
+	walletOverlayPosition = "TOP_LEFT"
+

@@ -1,0 +1,11 @@
+{
+  "printModelCreationInfoToLog": false,
+  "printAllMaths": false,
+  "renderCustomModelsGreen": false,
+  "vanillaModelRenderMode": "Off",
+  "mathFunctionChoice": "JavaMath",
+  "tryForceEmfModels": true,
+  "printUnknownModelsMode": "NONE",
+  "attemptPhysicsModPatch_1": false,
+  "attemptToCopyVanillaModelIntoMissingModelPart": false
+}

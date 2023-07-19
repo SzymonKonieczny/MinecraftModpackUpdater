@@ -1,0 +1,10 @@
+{
+  "enableLegacyTitleScreen": true,
+  "enableLegacyLoadingScreen": true,
+  "enableMinecraftKeywordDisplay": true,
+  "enableVersionDisplay": true,
+  "enableFPSDisplay": true,
+  "enableChunkUpdateDisplay": true,
+  "enableCoordinateDisplay": true,
+  "enablePositionKeywordInCoordinateDisplay": true
+}

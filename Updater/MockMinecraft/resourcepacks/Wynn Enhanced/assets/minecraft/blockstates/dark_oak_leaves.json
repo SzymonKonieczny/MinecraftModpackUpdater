@@ -1,0 +1,15 @@
+{
+    "variants": {
+        "normal": [
+		{ "model": "better_leaves_dark_oak1" },
+		{ "model": "better_leaves_dark_oak1", "y": 90  },
+		{ "model": "better_leaves_dark_oak1", "y": 180 },
+		{ "model": "better_leaves_dark_oak1", "y": 270 },
+		
+		{ "model": "better_leaves_dark_oak2" },
+		{ "model": "better_leaves_dark_oak2", "y": 90  },
+		{ "model": "better_leaves_dark_oak2", "y": 180 },
+		{ "model": "better_leaves_dark_oak2", "y": 270 }
+				]
+		}
+}
