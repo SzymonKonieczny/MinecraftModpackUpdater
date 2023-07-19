@@ -28,6 +28,17 @@ public class MainGUI {
         JSONObject configJson;
 
     }
+    class ModsCheckInfo
+    {
+        public ModsCheckInfo() {
+            Redundant = new ArrayList<>();
+            Missing = new ArrayList<>();
+
+        }
+
+        public List<String> Redundant;
+        public List<String> Missing;
+    }
     class ConfigCheckInfo
     {
         public ConfigCheckInfo() {
@@ -79,9 +90,9 @@ public class MainGUI {
         return Mismatches;
     }
 
-    List<String> checkMods(List<String> list)  throws IOException
+    ModsCheckInfo checkMods(List<String> list)  throws IOException
     {
-        List<String> Mismatches = new ArrayList<>();
+        ModsCheckInfo Mismatches = new ModsCheckInfo();
         Path ModsPath = Path.of(enteredPath.getText()+"/mods");
         File modsDir = new File(ModsPath.toString());
         Set<String> modsSet = new HashSet<>();
@@ -91,11 +102,15 @@ public class MainGUI {
             }
         }
 
-        list.forEach(resourcepack -> {
-            if(!modsSet.contains(resourcepack))
-                Mismatches.add(resourcepack);
+        list.forEach(mod -> {
+            if(!modsSet.contains(mod))
+                Mismatches.Missing.add(mod);
         });
 
+        modsSet.forEach(mod -> {
+            if(!list.contains(mod))
+                Mismatches.Redundant.add(mod);
+        } );
 
 
 
@@ -106,14 +121,21 @@ public class MainGUI {
         }
         FileWriter writer = new FileWriter(Files.createFile(testLogs).toString());
         writer.write("Missing: \n");
-        Mismatches.forEach(s -> {
+        Mismatches.Missing.forEach(s -> {
             try {
                 writer.write(s + "\n");
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
         });
-
+        writer.write("Redundant: \n");
+        Mismatches.Redundant.forEach(s -> {
+            try {
+                writer.write(s + "\n");
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         writer.close();
         return Mismatches;
     }
@@ -156,7 +178,8 @@ public class MainGUI {
     void unpackResponceJson(JSONObject json,responceObj result)
     {
         String str;
-        String modsListStr = json.get("mods").toString().replace("[","").replace("]","").replace("\"","");
+        String modsListStr = json.get("mods").toString().replace("\"","");
+        modsListStr = modsListStr.substring(1,modsListStr.length()-1);
         Scanner modsScanner = new Scanner(modsListStr)
                 .useDelimiter(",");
              while (modsScanner.hasNext()) {
@@ -288,7 +311,7 @@ public class MainGUI {
     private JButton Update;
     private JTextField enteredPath;
 
-    List<String> MismatchesInMods ;
+    ModsCheckInfo MismatchesInMods ;
     List<String> MismatchesInResourcePacks;
     ConfigCheckInfo MismatchesInConfigs ;
 }
