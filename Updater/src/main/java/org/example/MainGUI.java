@@ -210,7 +210,8 @@ public class MainGUI {
     }
     void OutputTestFile(ConfigCheckInfo MismatchesInConfigs) throws IOException
     {
-        Path path = Paths.get(System.getProperty("user.dir")+ "/TestConfigChange.txt").toAbsolutePath();
+       // Path path = Paths.get(System.getProperty("user.dir")+ "/TestConfigChange.txt").toAbsolutePath();
+        Path path = Path.of(enteredPath.getText()+"/TestConfigChange.txt");
         if(Files.exists(path)) {
             Files.deleteIfExists(path);
         }
@@ -234,19 +235,20 @@ public class MainGUI {
         writer.close();
     }
 
-    responceObj responceObj;
+    JSONObject currentTimestampJson = new JSONObject();
     MainGUI()
     {
+        Path timestampPath = Paths.get(System.getProperty("user.dir")+ "/ConfigTimestamps.json").toAbsolutePath();
       CheckUpdate.addActionListener(new ActionListener() {
           @Override
           public void actionPerformed(ActionEvent e) {
             if(e.getActionCommand().equals("Check for  Updates"))
             {
-                responceObj = new responceObj();
-                Path path = Paths.get(System.getProperty("user.dir")+ "/ConfigTimestamps.json").toAbsolutePath();
+                responceObj responceObj = new responceObj();
+
                 try{
                     JSONObject responseJson = MyDownloader.downloadToJson(
-                            "https://script.google.com/macros/s/AKfycbzq0oz-6wivCZcqYp3V9olSZUdcXHFseDfgTQUF3pS7Gxfw0cfBz9eYb05K8WnnPEdz/exec");
+                            "https://script.google.com/macros/s/AKfycbw8y6pCLYiOr-qdxyY7-cG-7EdDrPq6kynCnaKZgf745-H3p35CPJEqcX9ua6YinLQH/exec?download=false");
 
                     unpackResponceJson(responseJson,responceObj);
 
@@ -254,9 +256,24 @@ public class MainGUI {
                    MismatchesInMods =          checkMods(responceObj.modList);
                    MismatchesInResourcePacks = checkResourcepacks(responceObj.resourcepackList);
 
-                   JSONObject localData = getLocalConfigTimestamps(path);
+                   JSONObject localData = getLocalConfigTimestamps(timestampPath);
                    MismatchesInConfigs =        checkConfigs(responceObj.configJson, localData);
 
+                   currentTimestampJson = responceObj.configJson;
+                    Label.setText("");
+                    if(MismatchesInMods.Missing.isEmpty()&& MismatchesInMods.Redundant.isEmpty())
+                        Label.setText(Label.getText()+ "Mods Compatible");
+
+                    else Label.setText(Label.getText()+ "Mods Incompatible");
+
+
+                    Label.setText(Label.getText()+ "     |        ");
+
+                    if(MismatchesInConfigs.Outdated.isEmpty()&&MismatchesInConfigs.Missing.isEmpty())
+                        Label.setText(Label.getText()+ "Configs Compatible");
+
+                    else
+                        Label.setText(Label.getText()+ "Configs Incompatible");
                     OutputTestFile(MismatchesInConfigs);
 
 
@@ -280,24 +297,81 @@ public class MainGUI {
             public void actionPerformed(ActionEvent e) {
                 if(e.getActionCommand().equals("Update"))
                 {
+                    JOptionPane.showMessageDialog(null,"This may take a while since we use only free resources and we are being rate limited a lot, dont close the program until its done please");
                     Path currentRelativePath = Paths.get("");
                     String s = currentRelativePath.toAbsolutePath().toString();
-                   // try{
-                   //     MyDownloader.download(
-                   //             "https://script.google.com/macros/s/AKfycbwLyc256zHbKNWCBc3KwO0mt8snasTO9l55Fj3AFoMu59KhEtm24jWbJLCTyLSX20Yu/exec",s);
-                   //
-                   // }
-                   // catch (IOException a)
-                   // {
-                   //     Label.setText(a.getMessage());
-                   // }
+                    responceObj  responceObj = new responceObj();
+                    try{
+
+                    JSONObject responseJson = MyDownloader.downloadToJson(
+                            "https://script.google.com/macros/s/AKfycbw8y6pCLYiOr-qdxyY7-cG-7EdDrPq6kynCnaKZgf745-H3p35CPJEqcX9ua6YinLQH/exec?download=true");
+
+                    unpackResponceJson(responseJson,responceObj);
+                                                    //---------------------------------------CONFIGS--------------------------------------
+                         MismatchesInConfigs.Missing.forEach(config -> {
+                             try {
+                                 Label.setText("Downloading config : " + config);
+                                 Path path = Path.of(enteredPath.getText()+"/config");
+                                 MyDownloader.downloadToFile(responceObj.configJson.get(config).toString(),path,config );
+                             } catch (IOException ex) {
+                                 System.out.println(ex.getCause());
+                                 System.out.println(Thread.currentThread().getStackTrace().toString());
+
+                                 throw new RuntimeException(ex);
+                             }
+                         });
+                        MismatchesInConfigs.Outdated.forEach(config -> {
+                            try {
+                                Label.setText("Downloading config : " + config);
+                                Path path = Path.of(enteredPath.getText()+"/config");
+                                MyDownloader.downloadToFile(responceObj.configJson.get(config).toString(),path,config );
+                            } catch (IOException ex) {
+                                throw new RuntimeException(ex);
+                            }
+                        });
+                        if(Files.exists(timestampPath)) {
+                            Files.deleteIfExists(timestampPath);
+                        }
+                        FileWriter writer = new FileWriter(Files.createFile(timestampPath).toString());
+                        writer.write(currentTimestampJson.toString());
+                        writer.close();
+
+                        //---------------------------------------MODS--------------------------------------
+                        JSONObject modLinksJson = new JSONObject(responseJson.get("mods").toString().replace("\n",""));
+
+                        MismatchesInMods.Redundant.forEach(modName -> {
+                            Path path = Path.of(enteredPath.getText()+"/mods/" + modName);
+                            try {
+                                Files.deleteIfExists(path);
+                            } catch (IOException ex) {
+                                throw new RuntimeException(ex);
+                            }
+                        });
+
+                        MismatchesInMods.Missing.forEach(modName -> {
+                            Path path = Path.of(enteredPath.getText()+"/mods/");
+                            try {
+                                Label.setText("Downloading config : " + modName);
+                                MyDownloader.downloadToFile(modLinksJson.get(modName).toString(),path,modName );
+                            } catch (IOException ex) {
+                                throw new RuntimeException(ex);
+                            }
+                        });
+//
+                        Label.setText("Juz, mozna zamknac program");
+
+                    }
+                    catch (IOException a)
+                    {
+                        Label.setText(a.getMessage());
+                    }
                 }
             }
         });
     }
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Testing");
+        JFrame frame = new JFrame("Rafalpack installer :3 meow");
         frame.setContentPane(new MainGUI().MainPanel);
       //  frame.pack();
         frame.setSize(400,400);

@@ -8,18 +8,42 @@ import java.io.*;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.Random;
 
 public class MyDownloader {
-    public static void downloadToFile(String downloadURL, String Path) throws IOException
+    public static void downloadToFile(String downloadURL, Path path, String filename) throws IOException
     {
-        URL website = new URL(downloadURL);
-        String fileName = getFileName(downloadURL);
+        int i = 0;
+        int maximum_backoff = 32000;
+        do{
+            int random_number_milliseconds = (int)(Math.random()*1000);
+            URL website = new URL(downloadURL);
+            int waitTime = (int)Math.min(((Math.pow(2,i))+random_number_milliseconds), maximum_backoff);
+            System.out.println("Downloading : " + filename + " with backoff of " +waitTime + " via " + downloadURL);
+            try (InputStream inputStream = website.openStream())
+            {
+                Thread.sleep(waitTime);
+                Files.copy(inputStream, Path.of( path.toString()+"/"+filename), StandardCopyOption.REPLACE_EXISTING);
 
-        try (InputStream inputStream = website.openStream())
-        {
-           // Files.copy(inputStream, Paths.get(Path+fileName), StandardCopyOption.REPLACE_EXISTING);
-        }
+                return;
+            }
+            catch (Exception ex)
+            {
+                i++;
+                System.out.println(i);
+
+
+            }
+
+
+
+        }while ((Math.pow(2,i)) < maximum_backoff);
+
+        //If we get here, download failed
+        return;
+
     }
     public static JSONObject downloadToJson(String downloadURL) throws IOException
     {
