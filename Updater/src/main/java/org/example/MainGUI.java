@@ -238,6 +238,7 @@ public class MainGUI {
     JSONObject currentTimestampJson = new JSONObject();
     MainGUI()
     {
+        System.out.println("Starting gui");
         Path timestampPath = Paths.get(System.getProperty("user.dir")+ "/ConfigTimestamps.json").toAbsolutePath();
       CheckUpdate.addActionListener(new ActionListener() {
           @Override
@@ -267,7 +268,7 @@ public class MainGUI {
                     else Label.setText(Label.getText()+ "Mods Incompatible");
 
 
-                    Label.setText(Label.getText()+ "     |        ");
+                    Label.setText(Label.getText()+ "       |        ");
 
                     if(MismatchesInConfigs.Outdated.isEmpty()&&MismatchesInConfigs.Missing.isEmpty())
                         Label.setText(Label.getText()+ "Configs Compatible");
@@ -384,6 +385,7 @@ public class MainGUI {
     private JButton CheckUpdate;
     private JButton Update;
     private JTextField enteredPath;
+    private JRadioButton radioButton1;
 
     ModsCheckInfo MismatchesInMods ;
     List<String> MismatchesInResourcePacks;
